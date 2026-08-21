@@ -50,6 +50,10 @@ ipcMain.handle("folder:open", async (): Promise<CsvFileData[]> => {
     }
 });
 
+// Minknow file selection
+ipcMain.handle("file:open", async () => {
+
+});
 // Save file
 ipcMain.handle("file:save", async (_event, file: CsvFileData) => {
     const csvText = stringify(file.rows, {header: true, columns: file.headers});

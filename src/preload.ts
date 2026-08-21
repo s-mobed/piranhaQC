@@ -19,5 +19,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
         }
     },
     openFolder: (): Promise<CsvFileData[]> => ipcRenderer.invoke("folder:open"),
+    openFile: (): Promise<File>=> ipcRenderer.invoke("file:open"),
     saveFile: (file: CsvFileData): Promise<boolean> => ipcRenderer.invoke("file:save", file),
 });

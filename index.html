@@ -5,15 +5,106 @@
     <style>
       label { display: block; margin-bottom: 8px;}
       input { margin-left: 8px; padding: 4px;}
+      table {border-collapse: collapse; margin-top: 10px;}
+      th, td { border: 1px solid #ccc; padding: 6px 10px;text-align: center;}
+      thead th {background: #706e6e;}
     </style>
   </head>
+  <h1> Piranha QC</h1>
   <body>
-    <button id="open-folder-btn">Open Folder </button>
+    <button id="open-piranha-btn">Open Piranha Folder </button> 
+    <span id="report-name"> No folder loaded</span> <br>
+
+    <button id="open-minknow-btn">Open MinKnow File </button> 
+    <span id="minknow-name"> No file loaded</span> <br>
+
     <button id="prev-btn">Prev</button>
     <button id="next-btn">Next</button>
     <button id="save-btn">Save</button>
+    <button id="runwide-btn">Start QC</button>
+    <button id="barcode-btn">Barcodes</button>
     <p id="status"></p>
     <div id="row-form"></div>
+
+    <table id="table">
+      <thead>
+        <tr>
+          <th> </th>
+          <th>Closest Reference</th>
+          <th>Read Count</th>
+          <th>Nucleotide Difference</th>
+          <th>Percentage Match</th>
+          <th>Classification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Sabin1</th>
+          <td id="cell-Sabin1-related-closest_reference"></td>
+          <td id="cell-Sabin1-related-num_reads"></td>
+          <td id="cell-Sabin1-related-nt_diff_from_reference"></td>
+          <td id="cell-Sabin1-related-pcent_match"></td>
+          <td id="cell-Sabin1-related-classification"></td>
+        </tr>
+        <tr>
+          <th>Sabin2</th>
+          <td id="cell-Sabin2-related-closest_reference"></td>
+          <td id="cell-Sabin2-related-num_reads"></td>
+          <td id="cell-Sabin2-related-nt_diff_from_reference"></td>
+          <td id="cell-Sabin2-related-pcent_match"></td>
+          <td id="cell-Sabin2-related-classification"></td>
+        </tr>
+        <tr>
+          <th>Sabin3</th>
+          <td id="cell-Sabin3-related-closest_reference"></td>
+          <td id="cell-Sabin3-related-num_reads"></td>
+          <td id="cell-Sabin3-related-nt_diff_from_reference"></td>
+          <td id="cell-Sabin3-related-pcent_match"></td>
+          <td id="cell-Sabin3-related-classification"></td>
+        </tr>
+             <tr>
+          <th>WPV1</th>
+          <td id="cell-WPV1-closest_reference"></td>
+          <td id="cell-WPV1-num_reads"></td>
+          <td id="cell-WPV1-nt_diff_from_reference"></td>
+          <td id="cell-WPV1-pcent_match"></td>
+          <td id="cell-WPV1-classification"></td>
+        </tr>
+        <tr>
+          <th>WPV2</th>
+          <td id="cell-WPV2-closest_reference"></td>
+          <td id="cell-WPV2-num_reads"></td>
+          <td id="cell-WPV2-nt_diff_from_reference"></td>
+          <td id="cell-WPV2-pcent_match"></td>
+          <td id="cell-WPV2-classification"></td>
+        </tr>
+        <tr>
+          <th>WPV3</th>
+          <td id="cell-WPV3-closest_reference"></td>
+          <td id="cell-WPV3-num_reads"></td>
+          <td id="cell-WPV3-nt_diff_from_reference"></td>
+          <td id="cell-WPV3-pcent_match"></td>
+          <td id="cell-WPV3-classification"></td>
+        </tr>
+          <tr>
+          <th>NonPolioEV</th>
+          <td id="cell-NonPolioEV-closest_reference"></td>
+          <td id="cell-NonPolioEV-num_reads"></td>
+          <td id="cell-NonPolioEV-nt_diff_from_reference"></td>
+          <td id="cell-NonPolioEV-pcent_match"></td>
+          <td id="cell-NonPolioEV-classification"></td>
+        </tr>
+        <tr>
+          <th>PositiveControl</th>
+          <td id="cell-PositiveControl-closest_reference"></td>
+          <td id="cell-PositiveControl-num_reads"></td>
+          <td id="cell-PositiveControl-nt_diff_from_reference"></td>
+          <td id="cell-PositiveControl-pcent_match"></td>
+          <td id="cell-PositiveControl-classification"></td>
+        </tr>
+      </tbody>
+    </table>
+
     <script type="module" src="dist/renderer.js"></script>
   </body>
 </html>

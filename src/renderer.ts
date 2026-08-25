@@ -10,12 +10,26 @@ declare global {
 }
 
 // Split individual sample fields from run wide constants
-const BARCODE_HEADERS = ["sample","date","institute"]
+const BARCODE_HEADERS = ["sample","barcode","IsQCRetest","IfRetestOriginalRun","SampleType","DelaysInProccessingForDDNS","DetailsOfDelays","DateRNAextraction",
+                         "ExtractionKit","ExtractionType","DateRTPCR","RTPCRMachine","RTPCRcomments","DatePanEVPCR","PanEVPCRMachine","PanEVprimers","PanEVPCRcomments",
+                         "DateVP1PCR","VP1PCRMachine","VP1primers","VP1PCRcomments","PositiveControlPCRCheck","NegativeControlPCRCheck","LibraryPreparationKit","Well",
+                         "RunNumber","AnalysisPipelineVersion","RunQC","DDNSclassification","SampleQC", "SampleQCChecksComplete","QCComments",
+                         "EmergenceGroupVDPV1","EmergenceGroupVDPV2","EmergenceGroupVDP3"];
+  
+// EPI INFO if such data is merged with before piranha
+const EPIINFO_HEADERS = ["EPID","EpidNumber","CaseOrContact","Country","Province","District","StoolCondition","SpecimenNumber","DateOfOnset","DateStoolCollected",
+                         "DateStoolSentfromField","DateStoolReceivedNatLevel","DateStoolSentToLab","DateStoolReceivedinLab","FinalCellCultureResult",
+                         "DateFinalCellCultureResults","FinalITDResult","DateFinalrRTPCRResults","DateIsolateSentforSeq","SequenceName","DateSeqResult"]
 
+// Run wide constants to be checked first and applied to whole dataset
 const RUNWIDE_HEADERS = ["institute","SequencingLab","ExtractionKit","ExtractionType","RTPCRMachine","RTPCRcomments","DatePanEVPCR","PanEVPCRMachine",
                         "PanEVprimers","PanEVPCRcomments","DateVP1PCR","VP1PCRMachine","VP1primers","VP1PCRcomments","PositiveControlPCRCheck",
-                        "NegativeControlPCRCheck","LibraryPreparationKit","RunNumber","DateSeqRunLoaded","SequencerUsed","FlowCellVersion","FlowCellID",
-                        "FlowCellPriorUses","PoresAvilableAtFlowCellCheck","MinKNOWSoftwareVersion","RunHoursDuration","DateFastaGenerated","AnalysisPipelineVersion"]
+                        "NegativeControlPCRCheck","LibraryPreparationKit","RunNumber","AnalysisPipelineVersion","RunQC"]
+
+// Minknow fields, could be extracted from Minknow report and displayed in run wide page
+const MINKNOW_HEADERS = ["DateSeqRunLoaded","SequencerUsed","FlowCellVersion","FlowCellID","FlowCellPriorUses","PoresAvilableAtFlowCellCheck",
+                         "MinKNOWSoftwareVersion","RunHoursDuration","DateFastaGenerated"];    
+
 
 let currentFile: CsvFileData | null = null
 let currentRowIndex = 0;
@@ -37,6 +51,7 @@ const saveBtn = document.getElementById("save-btn")!; // saves report with QC su
 
 // HTML elements
 const formContainer = document.getElementById("row-form")!;
+const epiContainer = document.getElementById("epi-table")!;
 const Table = document.getElementById("table")!;
 const statusE1 = document.getElementById("status")!;
 
@@ -93,6 +108,7 @@ saveBtn.addEventListener("click", async () => {
     statusE1.textContent = `Save ${currentFile.fileName}`;
 });
 
+// Render Run wide page
 function renderCol(){
     if (!currentFile) {
         formContainer.innerHTML = "<p>No Folder loaded</p>";
@@ -101,8 +117,8 @@ function renderCol(){
     const row = currentFile.rows[currentRowIndex];
 
     formContainer.innerHTML = "";
-    for (const header of RUNWIDE_HEADERS) {
-        if (!currentFile.headers.includes(header)) continue;
+    for (const header of RUNWIDE_HEADERS && MINKNOW_HEADERS) {
+        // if (!currentFile.headers.includes(header)) continue;
 
         const label = document.createElement("label");
         label.textContent = header;
@@ -119,7 +135,35 @@ function renderCol(){
     statusE1.textContent = `Displaying Run wide Values`
 
 }
+// render EPI INFO in a non changeable format
+function renderEPI () {
+    if (!currentFile) {
+        epiContainer.innerHTML = "<p>No Folder loaded</p>";
+        return;
+    }
+    const row = currentFile.rows[currentRowIndex];
 
+    epiContainer.innerHTML = "";
+    for (const header of EPIINFO_HEADERS) {
+        // if (!currentFile.headers.includes(header)) continue;
+
+        const wrapper = document.createElement("label");
+
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = header;
+        titleSpan.className = "field-title";
+
+        const valueSpan = document.createElement("span");
+        valueSpan.textContent = row[header] ?? "";
+        valueSpan.className = "field-value";
+
+        wrapper.appendChild(titleSpan);
+        wrapper.appendChild(valueSpan);
+        epiContainer.appendChild(wrapper);
+    }
+}
+
+// Render barcode info
 function renderRow() {
     if (!currentFile) {
     formContainer.innerHTML = "<p>No Folder loaded</p>";
@@ -129,8 +173,8 @@ function renderRow() {
 
     // Show changeable values
     formContainer.innerHTML = "";
-    for (const header of BARCODE_HEADERS) {
-        if (!currentFile.headers.includes(header)) continue;
+    for (const header of BARCODE_HEADERS ) {
+        // if (!currentFile.headers.includes(header)) continue;
 
         const label = document.createElement("label");
         label.textContent = header;
@@ -144,6 +188,9 @@ function renderRow() {
         label.appendChild(input);
         formContainer.appendChild(label);
     }
+
+    // Show EPI
+    renderEPI();
 
     // Piranha results
     const TARGETS = ['Sabin1-related','Sabin2-related','Sabin3-related','WPV1','WPV2','WPV3','NonPolioEV','PositiveControl'];
